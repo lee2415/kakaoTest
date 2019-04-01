@@ -1,0 +1,26 @@
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /db-console
+  datasource:
+    url: jdbc:h2:~/main
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  application:
+    base-package: com.kakao.test
+
+
+logging:
+  level:
+    com.kakao.test: DEBUG
+  
+server:
+  port: 8080
+  
+kakaopay:
+  jwt-key: kakaopayTest
+  jwt-header-name: Authorization
+  access-token-validity-seconeds: 1800
+  
