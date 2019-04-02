@@ -50,6 +50,15 @@
 			<artifactId>jjwt</artifactId>
 			<version>0.9.0</version>
 		</dependency>
+
+		<!-- csv -->
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-csv</artifactId>
+		    <version>1.4</version>
+		    <type>jar</type>
+		</dependency>
+
 	</dependencies>
 
 	<build>

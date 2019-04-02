@@ -11,6 +11,10 @@ public class BizException extends RuntimeException {
 		this(exceptionCode, null, null);
 	}
 	
+	public BizException(Throwable cause) {
+		this("ERROR.999", cause, null);
+	}
+	
 	public BizException(String exceptionCode, Throwable cause) {
 		this(exceptionCode, cause, null);
 	}
