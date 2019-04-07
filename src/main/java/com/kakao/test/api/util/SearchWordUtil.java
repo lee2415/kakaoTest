@@ -61,7 +61,7 @@ public class SearchWordUtil {
 		
 		// 이차보전 비율 검색
 		List<Integer> rateResultIndex = KmpUtil.search(input, "%");
-		Float rate = checkWordRate(rateResultIndex, input);
+		Double rate = checkWordRate(rateResultIndex, input);
 		log.debug("rate : {}", rate);
 		resultMap.put("rate", rate);
 		
@@ -116,8 +116,8 @@ public class SearchWordUtil {
 	 * @param input
 	 * @return
 	 */
-	private static Float checkWordRate(List<Integer> list, String input) {
-		Float resultValue = (float) -1;
+	private static Double checkWordRate(List<Integer> list, String input) {
+		Double resultValue = (double) -1;
 
 		for(Integer index : list) {
 
@@ -125,7 +125,7 @@ public class SearchWordUtil {
 			while((input.charAt(index-j) > 47 && input.charAt(index-j) < 58) || input.charAt(index-j) == '.'){
 				j++;
 			}
-			Float compareValue = SortUtil.stringToRateFloat(input.substring(index-j,index));
+			Double compareValue = SortUtil.stringToRateDouble(input.substring(index-j,index));
 			if(resultValue.compareTo(compareValue) == -1) {
 				resultValue = compareValue;
 			}

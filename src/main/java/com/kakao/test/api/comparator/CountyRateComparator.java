@@ -12,8 +12,8 @@ public class CountyRateComparator implements Comparator<County>{
 
 	@Override
 	public int compare(County o1, County o2) {
-		Float compareValue1 = SortUtil.stringToRateFloat(o1.getRate());
-		Float compareValue2 = SortUtil.stringToRateFloat(o2.getRate());
+		Double compareValue1 = SortUtil.stringToRateDouble(o1.getRate());
+		Double compareValue2 = SortUtil.stringToRateDouble(o2.getRate());
 
 		return compareValue1.compareTo(compareValue2);
 	}

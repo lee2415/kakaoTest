@@ -109,20 +109,30 @@ public class ApiTest {
 		Integer limit = (Integer) resultMap.get("limit");
 		// 검색한 금액 보다 큰 데이터는 삭제 
 		int checkLimitIndex = SortUtil.checkLimitIndex(countyList, limit);
+		
 		// 검색한 금액 보다 큰 데이터가 없을 경우 list size를 return 
 		if(checkLimitIndex != countyList.size()) {
-			countyList = countyList.subList(0, checkLimitIndex);
+			countyList = countyList.subList(checkLimitIndex, countyList.size());
 		}
+		log.debug("checkLimitIndex : {}, limit: {}", checkLimitIndex, limit);
+		for(County county : countyList) {
+			log.debug("region : {}, limit : {}, rate : {}", county.getCountyCode().getRegion(), county.getLimit(), county.getRate());
+		}
+		
 		assertThat(countyList.size(), is(25));
 		SortUtil.sortAndRate(countyList);
 		
-		Float rate = (Float) resultMap.get("rate");
+		Double rate = (Double) resultMap.get("rate");
 		int checkRateIndex = SortUtil.checkRateIndex(countyList, rate);
 		if(checkRateIndex != countyList.size()) {
 			countyList = countyList.subList(0, checkRateIndex);
 		}
+		log.debug("checkRateIndex :{} , rate : {}", checkRateIndex, rate);
+		for(County county : countyList) {
+			log.debug("region : {}, limit : {}, rate : {}, rate average: {}", county.getCountyCode().getRegion(), county.getLimit(), county.getRate(), SortUtil.stringToRateDouble(county.getRate()));
+		}
 		
-		assertThat(countyList.size(), is(11));
+		assertThat(countyList.size(), is(12));
 		
 		double x = (double) resultMap.get("x");
 		double y = (double) resultMap.get("y");
@@ -152,24 +162,16 @@ public class ApiTest {
 	}
 	
 	@Test
-	public void randomGenertatorGeolocation() {
+	public void averageTest() {
+		String value = "0.4%~1.8%";
+		Double returnValue = SortUtil.stringToRateDouble(value);
+		assertThat(returnValue, is(1.1));
 		
-		// 34 ~ 38
-		// 124 ~ 128
-		// 소수점은 5자리수까지
-		
-		double x1 = 34.1234;
-		double y1 = 124.1234;
-		
-		double x2 = 36.1234;
-		double y2 = 124.1234;
-		
-		double x3 = 36.1234;
-		double y3 = 125.1234;
-		
-		System.out.println(SortUtil.distance(x1, y1, x2, y2));
-		System.out.println(SortUtil.distance(x1, y1, x3, y3));
-		
+		value = "4%";
+		returnValue = SortUtil.stringToRateDouble(value);
+		assertThat(returnValue, is(4.0));
 	}
+	
+	
 	
 }

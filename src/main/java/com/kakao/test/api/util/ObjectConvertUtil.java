@@ -47,8 +47,8 @@ public class ObjectConvertUtil {
 	    	// 내부적으로 거리 계산을 위해, 데이터 생성시 임의로 좌표 랜덤값으로 생성하여 저장 
 	    	CountyLocation countyLocation = new CountyLocation();
 	    	countyLocation.setRegionCode(county.getRegionCode());
-	    	countyLocation.setX((float)Math.random() * 5 + 34);
-	    	countyLocation.setY((float)Math.random() * 5 + 124);
+	    	countyLocation.setX((double)Math.random() * 5 + 34);
+	    	countyLocation.setY((double)Math.random() * 5 + 124);
 
 	    	CountyCode countyCode = new CountyCode();
 	    	countyCode.setRegion(record.get(1));

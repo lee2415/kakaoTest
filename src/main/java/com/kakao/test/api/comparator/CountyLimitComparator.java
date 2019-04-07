@@ -15,6 +15,6 @@ public class CountyLimitComparator implements Comparator<County>{
 		Integer compareValue1 = SortUtil.stringToValueInteger(o1.getLimit());
 		Integer compareValue2 = SortUtil.stringToValueInteger(o2.getLimit());
 
-		return compareValue1.compareTo(compareValue2);
+		return compareValue2.compareTo(compareValue1);
 	}
 }

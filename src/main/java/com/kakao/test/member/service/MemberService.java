@@ -36,7 +36,10 @@ public class MemberService {
 	}
 	
 	public String signin(Member member) {
-		Member selectMember = memberDao.getOne(member.getUserId());
+		Member selectMember = memberDao.findByUserId(member.getUserId());
+		if(selectMember == null) {
+			throw new BizException("ERROR.MEMBER", "가입되지 않은 회원입니다.");
+		}
 		log.debug(selectMember.toString());
 		
 		// 암호화된 값과 입력받은 값을 암호화하여 비교하여 로그인 여부 판단 

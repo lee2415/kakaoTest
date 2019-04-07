@@ -38,7 +38,13 @@ public class CountyService {
 	
 	public List<Map<String,String>> select() {
 		// 전체 리스트를 조회하여 결과에 맞게 Map으로 변경하여 return 
-		return ObjectConvertUtil.convertResultTypeList(countyDao.findAll());
+		List<County> countyList = countyDao.findAll();
+		
+		if(countyList.size() == 0) {
+			throw new BizException("ERROR.API", "데이터가 없습니다. 저장을 먼저 진행해주세요.");
+		}
+		
+		return ObjectConvertUtil.convertResultTypeList(countyList);
 	}
 	
 	public Map<String,String> setlectRegion(String region) {
@@ -66,8 +72,13 @@ public class CountyService {
 	public Map<String, List<String>> selectSortAndLimit(int limitCount){
 		Map<String, List<String>> resultMap = new HashMap<>();
 		
+		List<County> countyList = countyDao.findAll();
+		if(countyList.size() == 0) {
+			throw new BizException("ERROR.API", "데이터가 없습니다. 저장을 먼저 진행해주세요.");
+		}
+		
 		// 전체를 조회하여 정렬과 limit 개수만큼 출력 제한 
-		List<County> list = SortUtil.sortAndLimit(countyDao.findAll(), limitCount);
+		List<County> list = SortUtil.sortAndLimit(countyList, limitCount);
 		
 		// 결과값에서 지자체명만 가져와 return 
 		List<String> resultList = new LinkedList<String>();
@@ -81,8 +92,14 @@ public class CountyService {
 	
 	public Map<String, String> selectInstitute() {
 		Map<String, String> resultMap = new HashMap<>();
+		
+		List<County> countyList = countyDao.findAll();
+		if(countyList.size() == 0) {
+			throw new BizException("ERROR.API", "데이터가 없습니다. 저장을 먼저 진행해주세요.");
+		}
+		
 		// 이차보전 비율 기준으로 정렬 
-		List<County> list = SortUtil.sortAndRate(countyDao.findAll());
+		List<County> list = SortUtil.sortAndRate(countyList);
 		
 		// 이차보전 비율이 가장 작은 값으로 return 
 		resultMap.put("region", list.get(0).getInstitute());
@@ -118,12 +135,12 @@ public class CountyService {
 			int checkLimitIndex = SortUtil.checkLimitIndex(countyList, limit);
 			// 검색한 금액 보다 큰 데이터가 없을 경우 list size를 return 
 			if(checkLimitIndex != countyList.size()) {
-				countyList = countyList.subList(0, checkLimitIndex);
+				countyList = countyList.subList(checkLimitIndex, countyList.size());
 			}
 		}
 		SortUtil.sortAndRate(countyList);
 		
-		Float rate = (Float) resultMap.get("rate");
+		Double rate = (Double) resultMap.get("rate");
 		if(rate != -1) {
 			int checkRateIndex = SortUtil.checkRateIndex(countyList, rate);
 			if(checkRateIndex != countyList.size()) {

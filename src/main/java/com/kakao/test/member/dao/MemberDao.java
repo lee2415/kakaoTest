@@ -5,4 +5,5 @@ import com.kakao.test.member.entity.Member;
 
 public interface MemberDao extends JpaRepository<Member, String>{
 
+	public Member findByUserId(String userId);
 }

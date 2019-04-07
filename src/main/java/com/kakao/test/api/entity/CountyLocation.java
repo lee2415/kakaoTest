@@ -20,6 +20,6 @@ public class CountyLocation {
 	@Id
 	@Column(updatable = false, nullable = false)
 	private String regionCode;
-	private float x;
-	private float y;
+	private Double x;
+	private Double y;
 }

@@ -52,6 +52,10 @@ public class SortUtil{
 			log.debug("{}, {}", county.getLimit(), county.getRate());
 		}
 
+		if(limitCount > list.size()) {
+			limitCount = list.size();
+		}
+		
 		// limit 개수에 맞춰 return 
 		return list.subList(0, limitCount);
 	}
@@ -94,7 +98,7 @@ public class SortUtil{
 	public static void sortRate(List<County> list, int startIndex, int endIndex) {
 		for(int i=endIndex-1; i>startIndex; i--) {
 			for(int j=startIndex;j<i;j++) {
-				if(stringToRateFloat(list.get(i).getRate()).compareTo(stringToRateFloat(list.get(j).getRate())) == -1) {
+				if(stringToRateDouble(list.get(i).getRate()).compareTo(stringToRateDouble(list.get(j).getRate())) == -1) {
 					Collections.swap(list, i, j);
 				}
 			}
@@ -103,15 +107,21 @@ public class SortUtil{
 	
 	/**
 	 * 이차보전 비율 문자열로 된 값에 대해 수치화하여 비교가능한 숫자로 변환 
-	 * 2% ~ 3% 일경우 3%기준으로 변환 진행함.
+	 * 2% ~ 3% 일 경우 두 수의 평균을 구하여 계산 
 	 * @param str
 	 * @return
 	 */
-	public static Float stringToRateFloat(String str) {
+	public static Double stringToRateDouble(String str) {
 		if(str.contains("~")) {
-			str = str.substring(str.indexOf("~"), str.length());
+			String[] doubleValue = str.split("~");
+			Double sum = 0.0;
+			for(String rate : doubleValue) {
+				sum += Double.parseDouble(rate.replaceAll("[^0-9|.]", ""));
+			}
+			return sum / doubleValue.length;
+		} else {
+			return Double.parseDouble(defaultString(str.replaceAll("[^0-9|.]", ""),"100"));
 		}
-		return Float.parseFloat(defaultString(str.replaceAll("[^0-9|.]", ""),"100"));
 	}
 	
 	/**
@@ -170,14 +180,14 @@ public class SortUtil{
 	}
 	
 	/**
-	 * 입력한 지원금액보 같거나 작은 list의 index return하는 Method
+	 * 입력한 지원금액보다 같거나 작은 list의 index return하는 Method
 	 * @param list
 	 * @param limit
 	 * @return
 	 */
 	public static int checkLimitIndex(List<County> list, Integer limit) {
 		for(int i=0;i<list.size();i++) {
-			if(limit.compareTo(stringToValueInteger(list.get(i).getLimit())) == -1){
+			if(limit.compareTo(stringToValueInteger(list.get(i).getLimit())) == 0){
 				return i;
 			}
 		}
@@ -190,9 +200,9 @@ public class SortUtil{
 	 * @param rate
 	 * @return
 	 */
-	public static int checkRateIndex(List<County> list, Float rate) {
+	public static int checkRateIndex(List<County> list, Double rate) {
 		for(int i=0;i<list.size();i++) {
-			if(rate.compareTo(stringToRateFloat(list.get(i).getRate())) == -1){
+			if(rate.compareTo(stringToRateDouble(list.get(i).getRate())) == -1){
 				return i;
 			}
 		}

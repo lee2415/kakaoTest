@@ -5,7 +5,7 @@
 구분|제품명|Version
 --|--|--
 |개발언어|Java|1.8
-| DBMS | H2 |   
+| DBMS | H2 |1.4.197   
 | FrameWork | Spring Boot | 2.1.3.RELEASE 
 
 # 문제해결 전략
@@ -16,29 +16,40 @@
 
 3. api return형태를 맞추기 위해서 쿼리가 복잡해지고 모든 쿼리를 반영하는것보다는, 조회 후 return형식에 맞게 변경하도록 하는 방향이 효율적으로 판단되어 return을 위한 유틸을 생성하여 결과값에 반영
 
-4. 정렬의 경우 문자열의 정렬이 필요하여, 조회 후 해당 문자열을 수치화 하여 각각 비교하여 정렬 진행.
+4. 정렬의 경우 문자열 비교 정렬이 필요하여, 조회 후 해당 문자열을 수치화 하여 각각 비교하여 정렬 진행.
 
-5. 두가지 정렬의 경우 Comparator 사용 시 앞에서 정렬한 내용을 무시하고 재정렬을 진행하는 문제가 있어 수동으로 정렬 진행
+5. 두 가지 정렬(지원금액, 이차보전 비율)의 경우 Comparator 사용 시 앞에서 정렬한 내용을 무시하고 재정렬을 진행하는 문제가 있어 수동으로 정렬 진행
 
 6. 문자열 분석
 - 실제 검색이 필요한 문자열에 대해 미리 정의 후 해당 문자열 기준으로 조회하도록 진행 함.
 - 위치 정보는 실제로 해당 값을 구하기 어려워, 랜덤함수를 이용하여 초기 데이터 로딩 시 저장하여 사용하도록 진행
 ( 위치 정보가 데이터 저장 시 변경되기 때문에 데이터를 새로 넣을 경우 위치 데이터가 변경되어 결과값이 변경 됨 )
-- 문자열에서 위치에 조회를 위해서 지역에 대한 정보를 csv로 만들어 해당 지역정보를 이용하여 검색 진행, csv에 없을 경우 검색이 안되는 문제점이 있음. 
+- 문자열에서 위치에 조회를 위해서 지역에 대한 정보를 csv로 만들어 해당 지역정보를 이용하여 검색 진행 
 
 
 # 빌드 및 실행 방법
 ### 빌드 방법
-빌드는 Maven을 사용하여 빌드 진행
-``` mvn clean package ```
+Maven을 사용하여 빌드 진행
+
+    mvn clean package
 
 위 결과로 생성된 파일 실행
-``` java -jar target/kakaoTest-0.0.1-SNAPSHOT.jar ```
 
-접속 URL : http://localhost:8080
+    java -jar target/kakaoTest-0.0.1-SNAPSHOT.jar
+
+기본 접속 URL : http://localhost:8080
+
+H2 DB Console 접속 URL : http://localhost:8080/db-console/
+
+    Driver Class : org.h2.Driver
+    JDBC URL : jdbc:h2:~/main
+    USER NAME : sa
+    Passworld : 
+
+
 
 # API 정의
-API 입력은 모두 json 형태로 진행.
+API 입력/출력은 모두 json 형태로 진행.
 
 #### 공통 output sample
     정상일 경우 아래와 같이 공통 return 메시지와 나머지 정보를 같이 return 한다.
@@ -77,7 +88,7 @@ API 설명|userID와 userPass를 입력 받아 회원 가입을 진행하는 API
         "code": "00",
         "message": ""
     }
-#### output header 
+#### output header example
     Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcGlBdXRoIjp0cnVlLCJleHAiOjE1NTQzNjc0OTcsInVzZXJJZCI6ImxlZWwyNDE1IiwiaWF0IjoxNTU0MzYzODk3fQ.I0fb4JSWeX6F5QzptoaN6Uq-vq1-uCHS_9SEQ8XwtUY
     Content-Type: application/json;charset=UTF-8
     Transfer-Encoding: chunked
@@ -276,7 +287,7 @@ API 설명|지자체 정보를 수정하는 API, 입력한 지자체명 기준�
 --|--
 URL|/api/sort
 mehtod|GET
-API 설명|개수를 입력받아 해당 개수만큼 지원금액 내림차순 정렬로 정렬하여 지자체명을 List로 return 하는 API , 지원금액이 같을 경우 이차보전 평귤 비율이 적은 순서 ( 2% ~ 4% 일 경우 뒤의 큰 비율로 계산)로 정렬함
+API 설명|개수를 입력받아 해당 개수만큼 지원금액 내림차순 정렬로 정렬하여 지자체명을 List로 return 하는 API , 지원금액이 같을 경우 이차보전 평귤 비율이 적은 순서로 정렬함
 
 #### input example
     {
