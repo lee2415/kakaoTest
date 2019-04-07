@@ -13,6 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice(value="${spring.application.base-package}", annotations=Controller.class)
 @Slf4j
+/**
+ * Exception 발생시 해당 정보를 처리하기 위한 Handler
+ * Exceptino 발생에 대한 정보를 json 형태로 처리하여 return 해준다.
+ * @author ijeongseog
+ *
+ */
 public class GlobalExceptionHandler {
 
 	/**

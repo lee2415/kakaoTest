@@ -27,18 +27,28 @@ public class MemberTests extends InitTest {
 	@Test
 	@Transactional
 	public void signupTest() {
-		Member member = new Member();
-		
-		memberDao.save(member);
-		
-		Member selMember = memberDao.getOne(userId);
-		
+		String selecId = "leel2415";
+		Member selMember = memberDao.getOne(selecId);
 		assert member.getUserId().equals(selMember.getUserId()) && member.getUserPass().equals(selMember.getUserPass());
 	}
 	
 	@Test
 	public void findall() {
 		List<Member> list = memberDao.findAll();
-		assertThat(list.size(), is(0));
+		assertThat(list.size(), is(1));
+	}
+	
+	@Test
+	@Transactional
+	public void saveTest() {
+		Member member2 = new Member();
+		member2.setUserId("abcd");
+		member2.setUserPass("abcdd");
+		memberDao.save(member2);
+		
+		List<Member> list = memberDao.findAll();
+		
+		
+		assertThat(list.size(), is(2));
 	}
 }

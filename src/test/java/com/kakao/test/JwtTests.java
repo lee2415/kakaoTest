@@ -34,18 +34,4 @@ public class JwtTests extends InitTest{
 		assert !jwtComponent.checkJwt(jwt, member);
 	}
 	
-	@Test
-	public void tokenFail2() {
-		String jwt = jwtComponent.makeJwtToken(member);
-		
-		log.debug(jwt);
-		
-		try {
-			Thread.sleep(1000 * 11);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		assert !jwtComponent.checkJwt(jwt, member);
-	}
 }

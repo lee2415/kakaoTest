@@ -32,11 +32,19 @@ public class JwtComponent {
 	@Value("${kakaopay.access-token-validity-seconeds}")
 	private int accessTokenValiditySeconds;
 	
+	/**
+	 * JWT Token을 생성하는 Method 
+	 * member 객체의 정보를 토큰 내부에 넣어서 생성한다.
+	 * @param member
+	 * @return
+	 */
 	public String makeJwtToken(Member member) {
+		
 		SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 		byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(secretKey);
 		Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 		
+		// 내부 정보로 userID와 apiAuth 값을 넣어 체크
 		Map<String, Object> claimsMap = new HashMap<String, Object>();
 		claimsMap.put("userId", member.getUserId());
 		claimsMap.put("apiAuth", true);
@@ -51,6 +59,12 @@ public class JwtComponent {
 			.compact();
 	}
 	
+	/**
+	 * 로그인 시에 로그인 정보와 JWT Token을 체크하여 인증 체크하는 Method
+	 * @param jwt
+	 * @param member
+	 * @return
+	 */
 	public boolean checkJwt(String jwt, Member member) {
 		try {
 			Claims claims = jwtParser(jwt);
@@ -74,13 +88,25 @@ public class JwtComponent {
 		}
 	}
 	
+	/**
+	 * API 호출시에 Token에 대해 정상적인 토큰인지 체크하는 Method
+	 * @param jwt
+	 * @return
+	 * @throws BizException
+	 */
 	public boolean checkJwtApi(String jwt) throws BizException {
 		if(StringUtils.isEmpty(jwt)) {
 			throw new BizException("ERROR.JWT","인증에 실패하였습니다.");
 		}
 		try {
-			jwtParser(jwt);
-			return true;
+			Claims claims = jwtParser(jwt);
+			
+			// Token 생성시 넣었던 apiAuth값이 true인지 체크하여 성공 여부 실행 
+			if((Boolean)claims.get("apiAuth") == true) {
+				return true;
+			}
+			
+			return false;
 		} catch (ExpiredJwtException exception) {
 			log.error("토큰 만료");
 			throw new BizException("ERROR.JWT","토큰이 만료되었습니다.");
@@ -90,6 +116,11 @@ public class JwtComponent {
 		}
 	}
 	
+	/**
+	 * Token 정보를 받아 Token을 다시 생성하는 Method
+	 * @param jwt
+	 * @return
+	 */
 	public String refreshToken(String jwt) {
 		try {
 			Claims claims = jwtParser(jwt);
@@ -106,6 +137,11 @@ public class JwtComponent {
 		}
 	}
 	
+	/**
+	 * JWT 내용을 parsing하는 Method
+	 * @param jwt
+	 * @return
+	 */
 	private Claims jwtParser(String jwt) {
 		Claims claims = Jwts.parser()
 				.setSigningKey(DatatypeConverter.parseBase64Binary(secretKey))

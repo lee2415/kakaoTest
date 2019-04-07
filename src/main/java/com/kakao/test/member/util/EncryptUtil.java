@@ -1,4 +1,4 @@
-package com.kakao.test.common.util;
+package com.kakao.test.member.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

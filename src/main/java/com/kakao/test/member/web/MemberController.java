@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kakao.test.common.ResponseBase;
+import com.kakao.test.common.exception.BizException;
 import com.kakao.test.common.exception.ErrorVo;
 import com.kakao.test.member.entity.Member;
 import com.kakao.test.member.service.MemberService;
@@ -44,19 +45,26 @@ public class MemberController {
 	@Value("${kakaopay.jwt-header-name}")
 	private String AUTH_HEADER;
 	
+	// 재발급 구분을 위한 헤더 값 
 	private final String REFRESH_CHECK_HEADER = "Bearer";
 
 	/**
 	 * 회원 가입을 위한 API
+	 * userId와 userPass를 입력 받아 회원 가입 처리 후 토큰을 발급한다. 
 	 * @param userId, userPass
-	 * @return
+	 * @return 
 	 */
 	@PostMapping("/signup")
 	public ResponseEntity<Object> signup(@RequestBody Member member, HttpServletResponse response) {
 		
 		log.debug(member.toString());
+		
+		// 입력한 값에서 필수값 체크 진행 
+		if(StringUtils.isEmpty(member.getUserId()) || StringUtils.isEmpty(member.getUserPass())) {
+			throw new BizException("ERROR.MEMBER", "회원 가입을 위한 필수값이 부족합니다.");
+		}
 		String jwtToken = memberService.signup(member);
-
+		
 		response.setHeader(AUTH_HEADER, jwtToken);
 		return ResponseBase.ok();
 	}
@@ -71,6 +79,9 @@ public class MemberController {
 		
 		log.debug(member.toString());
 		
+		if(StringUtils.isEmpty(member.getUserId()) || StringUtils.isEmpty(member.getUserPass())) {
+			throw new BizException("ERROR.MEMBER", "로그인을 위한 필수값이 부족합니다.");
+		}
 		String jwtToken = memberService.signin(member);
 		
 		response.setHeader(AUTH_HEADER, jwtToken);
@@ -92,10 +103,13 @@ public class MemberController {
 		String token = request.getHeader(AUTH_HEADER);
 		if(StringUtils.isEmpty(token)) {
 			log.debug("token이 없습니다.");
+			throw new BizException("ERROR.MEMBER", "인증을 위한 Token이 없습니다.");
 		}
 		
+		// 재발행시에는 Bearer 정보가 있것으로 체크하여 return 
 		if(token.indexOf(REFRESH_CHECK_HEADER) < 0) {
 			log.debug("재발행용 token 형식이 아닙니다.");
+			throw new BizException("ERROR.MEMBER", "재발행용 token 형식이 아닙니다.");
 		}
 		
 		token = token.substring(token.indexOf(REFRESH_CHECK_HEADER) + REFRESH_CHECK_HEADER.length() + 1);

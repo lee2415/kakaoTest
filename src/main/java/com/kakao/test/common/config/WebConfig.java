@@ -15,6 +15,7 @@ public class WebConfig implements WebMvcConfigurer {
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
+		// JWT 인증을 체크하는 Interceptor 추가, /member의 경우 토큰 관련 발급 작업을 진행하기 때문에 예외처리 진
 		registry.addInterceptor(jwtInterceptor)
 				.addPathPatterns("/**")
 				.excludePathPatterns("/member/**");

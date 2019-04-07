@@ -21,6 +21,8 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
 	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+		
+		// API 호출 시에 header에서 토큰 정보를 가져와 서비스 체크. 토큰에 문제가 있을 경우 Exception 발생 
 		String token = request.getHeader(AUTH_HEADER);
 		jwtComponent.checkJwtApi(token);
 		

@@ -1,5 +1,10 @@
 package com.kakao.test.common.exception;
 
+/**
+ * 내부적으로 Exception을 처리하기 위한 Exception 객체
+ * @author ijeongseog
+ *
+ */
 public class BizException extends RuntimeException {
 	
 	private static final long serialVersionUID = 1L;

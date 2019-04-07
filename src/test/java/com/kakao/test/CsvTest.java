@@ -1,7 +1,7 @@
 package com.kakao.test;
 
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
@@ -19,7 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.kakao.test.api.dao.CountyDao;
 import com.kakao.test.api.entity.County;
-import com.kakao.test.common.util.CsvUtil;
+import com.kakao.test.api.util.CsvUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -87,5 +87,15 @@ public class CsvTest extends InitTest{
     	county.setMgmt(record.get(7));
     	county.setReception(record.get(8));
     	return county;
+    }
+    
+    @Test
+    public void regionReadData() throws IOException {
+    	List<CSVRecord> list = CsvUtil.readRegionCsv();
+    	
+    	for(CSVRecord record : list) {
+    		log.debug(record.get(0));
+    	}
+    
     }
 }

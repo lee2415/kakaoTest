@@ -68,6 +68,9 @@ public class County {
 		if(!StringUtils.isEmpty(countyCode.getRegionCode())){
 			this.countyCode.setRegionCode(countyCode.getRegionCode());
 		}
+		if(countyCode.getLocation() != null) {
+			this.countyCode.setLocation(countyCode.getLocation());
+		}
 	}
 	
 }

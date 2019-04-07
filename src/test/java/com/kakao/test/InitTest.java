@@ -8,7 +8,9 @@ import java.io.InputStreamReader;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.junit.Before;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.kakao.test.member.dao.MemberDao;
 import com.kakao.test.member.entity.Member;
 
 public class InitTest {
@@ -22,10 +24,15 @@ public class InitTest {
 	CSVParser parser;
 	BufferedReader in;
 	
+	@Autowired
+	private MemberDao memberDao;
+	
 	@Before
 	public void init() {
 		member.setUserId(userId);
 		member.setUserPass(userPass);
+		
+		memberDao.save(member);
 	}
 	
 	@Before

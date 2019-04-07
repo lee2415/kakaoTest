@@ -24,4 +24,4 @@ server:
 kakaopay:
   jwt-key: kakaopayTest
   jwt-header-name: Authorization
-  access-token-validity-seconeds: 3600 #1800
+  access-token-validity-seconeds: 1800

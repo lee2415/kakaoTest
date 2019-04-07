@@ -16,4 +16,6 @@ public interface CountyDao extends JpaRepository<County, String>{
 	
 	public County findByRegionCode(@Param("regionCode") String regionCode);
 	public County findByCountyCodeRegion(@Param("region") String region);
+	
+	public List<County> findByUsageContaining(String usage);
 }

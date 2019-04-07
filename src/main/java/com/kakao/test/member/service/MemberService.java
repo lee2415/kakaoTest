@@ -1,15 +1,13 @@
 package com.kakao.test.member.service;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kakao.test.common.component.JwtComponent;
 import com.kakao.test.common.exception.BizException;
-import com.kakao.test.common.util.EncryptUtil;
 import com.kakao.test.member.dao.MemberDao;
 import com.kakao.test.member.entity.Member;
+import com.kakao.test.member.util.EncryptUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,6 +31,7 @@ public class MemberService {
 		member.setUserPass(encryptUserPass);
 		memberDao.save(member);
 			
+		// 가입된 정보 기준으로 JWT Token 발행하여 return 
 		return jwtComponent.makeJwtToken(member);
 	}
 	
@@ -40,6 +39,7 @@ public class MemberService {
 		Member selectMember = memberDao.getOne(member.getUserId());
 		log.debug(selectMember.toString());
 		
+		// 암호화된 값과 입력받은 값을 암호화하여 비교하여 로그인 여부 판단 
 		if(selectMember.getUserPass().equals(EncryptUtil.encrypt(member.getUserPass()))){
 			log.debug("login success");
 			return jwtComponent.makeJwtToken(member);

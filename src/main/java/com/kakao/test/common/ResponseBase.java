@@ -9,6 +9,12 @@ import org.springframework.http.ResponseEntity;
 
 import com.kakao.test.common.exception.ErrorVo;
 
+/**
+ * 일관적인 return HttpStatus를 설정하기 위한 responseBase
+ * 기본적으로 HttpStatus.OK로 return하고 코드로 에러 여부 체크하도록 설정 
+ * @author ijeongseog
+ *
+ */
 public class ResponseBase {
 	
 	public static <T> T ok() {
