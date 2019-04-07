@@ -140,6 +140,10 @@ API 설명|기존 토큰을 Header에 담아 요청 하게되면, 해당 Token�
     Transfer-Encoding: chunked
     Date: Sun, 07 Apr 2019 06:59:48 GMT
 
+
+* * *
+* * *
+
 ## 서비스 API
 
 서비스 API는 위에 가입하여 발급되는 JWT Token을 사용해야지만 서비스가 가능하며, 발급한 Token을 Header에 추가하여 요청이 필요함.
