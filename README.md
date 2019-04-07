@@ -6,7 +6,7 @@
 --|--|--
 |개발언어|Java|1.8
 | DBMS | H2 |1.4.197   
-| FrameWork | Spring Boot | 2.1.3.RELEASE 
+| Framework | Spring Boot | 2.1.3.RELEASE 
 
 # 문제해결 전략
 1. JWT 인증
